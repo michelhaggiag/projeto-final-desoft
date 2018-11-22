@@ -118,7 +118,7 @@ def Pontuacao(score):
     texto = fonte.render("Score: "+str(score),True, branco)
     tela.blit(texto,(0,0))
     
-main_menu = pygame.image.load('800x600.png')
+
 
 
 
@@ -145,7 +145,6 @@ main_menu = pygame.image.load('800x600.png')
 rodando = True
 while rodando:
     tempo = relogio.tick(30)
-    screen.blit(main_menu)
     
     if pygame.sprite.groupcollide(tiro_group, inimigo_group, True, True, collided = None):
         score+=1
