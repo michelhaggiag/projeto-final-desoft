@@ -161,7 +161,8 @@ def tela_inicial():
 
 estado=0
 
-
+pygame.mixer.music.load('spaceinvaders1.MPEG')
+pygame.mixer.music.play()
 rodando = True
 while rodando:
     tempo = relogio.tick(30)
@@ -169,6 +170,7 @@ while rodando:
     for event in pygame.event.get():
     # Verifica se o evento atual é QUIT (janela fechou).
         if event.type == QUIT:
+            pygame.mixer.music.stop()
             # Neste caso, marca o flag rodando como False, 
             # para sair do loop de jogo.
             rodando = False
@@ -180,7 +182,10 @@ while rodando:
     elif estado == 1:
   
         if pygame.sprite.groupcollide(tiro_group, inimigo_group, True, True, collided = None):
+            pygame.mixer.music.load('contato.MP3')
+            pygame.mixer.music.play()
             score+=1
+            pygame.mixer.music.queue('spaceinvaders1.MPEG')
         # === PRIMEIRA PARTE: LIDAR COM EVENTOS ===
     
         # Para cada evento não-processado na lista de eventos:
