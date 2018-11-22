@@ -127,15 +127,15 @@ def Pontuacao(score):
     
 def tela_inicial():
     
-    tela.fill(preto)
-    largeText = pygame.font.Font('freesansbold.ttf',90)
-    largeText2 = pygame.font.Font('freesansbold.ttf',30)
-    TextSurf, TextRect = text_objects("Space Invaders", largeText)
-    TextSurf2, TextRect2 = text_objects("(Pressione qualquer tecla para continuar)", largeText2)
-    TextRect.center = (((altura/2)),(largura/2))
-    TextRect2.center = (((altura/2)),((largura/2)+60))      
-    gameDisplay.blit(TextSurf, TextRect)
-    gameDisplay.blit(TextSurf2, TextRect2)
+    tela.blit(pygame.image.load("Untitled.png").convert(), (0, 0))     
+    #largeText = pygame.font.SysFont('PressStart2P', 55)
+    #largeText2 = pygame.font.SysFont('PressStart2P', 15)
+    #TextSurf, TextRect = text_objects("Space Invaders", largeText)
+    #TextSurf2, TextRect2 = text_objects("(Pressione qualquer tecla para continuar)", largeText2)
+    #TextRect.center = (((altura/2)),(largura/2))
+    #TextRect2.center = (((altura/2)),((largura/2)+65))      
+    #gameDisplay.blit(TextSurf, TextRect)
+    #gameDisplay.blit(TextSurf2, TextRect2)
     pygame.display.update()
     relogio.tick(30)
 
@@ -261,4 +261,4 @@ while rodando:
         # === FIM DA TERCEIRA PARTE ===
         # Agora volta para o início do loop e faz mais um passo do jogo.
 pygame.display.quit()
-
+#
