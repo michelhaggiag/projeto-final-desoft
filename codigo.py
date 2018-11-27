@@ -43,8 +43,16 @@ class Tiro(pygame.sprite.Sprite):
     def update(self):
         self.rect.y += self.vy
         
-class Inimigos(pygame.sprite.Sprite):
-    def __init__(self, arquivo_imagem, pos_x, pos_y,vel_x,vel_y):
+
+            
+class vidas(pygame.sprite.Sprite):
+    def __init__(self, xpos, ypos):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = transform.scale(self.image, (23, 23))
+        self.rect = self.image.get_rect(topleft=(xpos, ypos))
+
+class tiro_inimigo(pygame.sprite.Sprite):
+    def __init__(self, arquivo_imagem,pos_x, pos_y, vel_x, vel_y):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(arquivo_imagem)
         self.rect = self.image.get_rect()
@@ -52,6 +60,19 @@ class Inimigos(pygame.sprite.Sprite):
         self.rect.y = pos_y
         self.vx = vel_x
         self.vy = vel_y
+        def update(self):
+            self.rect.y += vy
+            self.rect.x += vx
+class Inimigos(pygame.sprite.Sprite):
+    def __init__(self, arquivo_imagem, pos_x, pos_y,vel_x,vel_y,tiro_ini):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(arquivo_imagem)
+        self.rect = self.image.get_rect()
+        self.rect.x = pos_x
+        self.rect.y = pos_y
+        self.vx = vel_x
+        self.vy = vel_y
+        self.tiro_ini = tiro_ini
     def update(self):     
         self.rect.x += self.vx
         if self.rect.x >= 750 or self.rect.x <= 0:
@@ -61,15 +82,10 @@ class Inimigos(pygame.sprite.Sprite):
             nave.kill()
             inimigo1.kill()
             inimigo2.kill()
-            
-class vidas(pygame.sprite.Sprite):
-    def __init__(self, xpos, ypos):
-        sprite.Sprite.__init__(self)
-        self.image = transform.scale(self.image, (23, 23))
-        self.rect = self.image.get_rect(topleft=(xpos, ypos))
+        if self.rect.x == 400 or self.rect.y == 150:
+            novo_tiro = tiro_inimigo('tiro.JPG',self.rect.x, self.rect.y,1,10)
+            self.tiro_ini.add(novo_tiro) 
 
-#class tiro_inimigo:
-#    def__init__(self,pos_x,pos_y)
 def text_objects(text, font):
     textSurface = font.render(text, True, branco)
     return textSurface, textSurface.get_rect()
@@ -93,32 +109,27 @@ nave_group.add(nave)
 
 tiro_group = pygame.sprite.Group()
 inimigo_group = pygame.sprite.Group()
+tiro_ini = pygame.sprite.Group()
+
+
+
 
 lista = []
 for k in range(10):
     lista.append(k*10)
 for i in lista:
-    inimigo1 = Inimigos('ini3.PNG',(i*10),15,(8.5),(0))
+    inimigo1 = Inimigos('ini3.PNG',(i*10),15,(8.5),(0),tiro_ini)
     inimigo_group.add(inimigo1)
     
 lista2 = []
 for k in range(10):
     lista2.append(k*10)
 for i in lista2:
-    inimigo2 = Inimigos('ini3.PNG',(i*10),120,(8.5),(0))
+    inimigo2 = Inimigos('ini3.PNG',(i*10),120,(8.5),(0),tiro_ini)
     inimigo_group.add(inimigo2)
     
-#lista3 = []
-#for k in range(10):
-#    lista3.append(k*10)
-#for i in lista3:
-#    inimigo2 = Inimigos('ini3.PNG',(i*10),225,(8),(0))
-#    inimigo_group.add(inimigo2)
-#    
 score=0
-#inimigo3 = Inimigos('inimigo3.PNG',(900),(100),(10),(10))
-#tiro = Tiro('tiro.jpg',((nave.rect.x)+57),((nave.rect.y)+40),-10)
-#tiro_group.add(tiro)
+
 
 def Pontuacao(score):
     fonte = pygame.font.SysFont(None, 25)
@@ -140,29 +151,13 @@ def tela_inicial():
     relogio.tick(30)
 
 
-
-
-
-
-#def make_enemies_shoot(self):
-#    if (time.get_ticks() - self.timer) > 700:
-#        inimigo1 = self.enemies.random_bottom()
-#        if inimigo1:
-#            self.enemyBullets.add(
-#                Tiro(inimigo1.rect.x + 14, .rect.y + 20, 1, 5,
-#                           'enemylaser', 'center'))
-#            self.allSprites.add(self.tiro)
-#            self.timer = time.get_ticks()
-
 # ===============   LOOPING PRINCIPAL   ===============
-
-
 
 
 estado=0
 
 pygame.mixer.music.load('spaceinvaders1.MPEG')
-pygame.mixer.music.play()
+pygame.mixer.music.play(-1)
 rodando = True
 while rodando:
     tempo = relogio.tick(30)
@@ -182,10 +177,10 @@ while rodando:
     elif estado == 1:
   
         if pygame.sprite.groupcollide(tiro_group, inimigo_group, True, True, collided = None):
-            pygame.mixer.music.load('contato.MP3')
-            pygame.mixer.music.play()
+            #pygame.mixer.Sound('contato.MP3')
+            #pygame.mixer.Sound.play()
             score+=1
-            pygame.mixer.music.queue('spaceinvaders1.MPEG')
+            #pygame.mixer.music.queue('spaceinvaders1.MPEG')
         # === PRIMEIRA PARTE: LIDAR COM EVENTOS ===
     
         # Para cada evento não-processado na lista de eventos:
@@ -213,27 +208,10 @@ while rodando:
         elif nave.rect.x < 0:
             if pressed_keys[K_LEFT]:  
                 nave.rect.x =0
-    #            tiro.rect.x =0
-    #    if inimigo1.rect.x > 675:
-    #        inimigo1.rect.x = 675 
-    #        inimigo1.rect.y += 35
-    #        inimigo1.vx = -10
-    #    elif inimigo1.rect.x < 0:
-    #        inimigo1.rect.x = 0
-    #        inimigo1.rect.y+=35
-    #        inimigo1.vx = 10
-    #    if inimigo1.rect.y > 420:
-    #        nave.kill()
-    #        inimigo1.kill()
-    #    elif inimigo1.rect.y > 530:
-    #        inimigo1.kill()
-    #    if inimigo2.rect.y > 530:
-    #        nave.kill()
-    #        inimigo1.kill()
-    #        inimigo2.kill()
             
         tiro_group.update()
         inimigo_group.update()
+        tiro_ini.update()
     
         
         
@@ -259,6 +237,7 @@ while rodando:
         nave_group.draw(tela)
         tiro_group.draw(tela)
         inimigo_group.draw(tela)
+        tiro_ini.draw(tela)
     
         # Troca de tela na janela principal.
         pygame.display.update()
